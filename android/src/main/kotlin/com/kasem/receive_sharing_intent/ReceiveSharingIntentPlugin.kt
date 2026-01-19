@@ -197,8 +197,8 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
         val intent = binding.activity.intent
         // We set the activity intent to null after handling it to avoid that the os
         // calls onAttachedToActivity again with the same intent
-        binding.activity.intent = null
-        if (intent != null) {
+        binding.activity.intent = Intent()
+        if (intent.action != null) {
             handleIntent(intent, true)
         }
     }
