@@ -52,20 +52,21 @@ android {
     }
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    // This dependency provides the io.flutter.* classes
-    compileOnly files(getFlutterJarPath())
-}
-
-// Function to locate the Flutter jar
-def getFlutterJarPath() {
-    def properties = new Properties()
-    file("local.properties").withInputStream { properties.load(it) }
-    def flutterRoot = properties.getProperty("flutter.sdk")
-    assert flutterRoot != null, "flutter.sdk not set in local.properties"
-    if (flutterRoot == null) {
-        throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-    }
-    return new File(flutterRoot, 'bin/cache/artifacts/engine/android-arm64-release/flutter.jar')
-}
+//// Add dependency for flutter while developing the plugin
+//dependencies {
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+//    // This dependency provides the io.flutter.* classes
+//    compileOnly files(getFlutterJarPath())
+//}
+//
+//// Function to locate the Flutter jar
+//def getFlutterJarPath() {
+//    def properties = new Properties()
+//    file("local.properties").withInputStream { properties.load(it) }
+//    def flutterRoot = properties.getProperty("flutter.sdk")
+//    assert flutterRoot != null, "flutter.sdk not set in local.properties"
+//    if (flutterRoot == null) {
+//        throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+//    }
+//    return new File(flutterRoot, 'bin/cache/artifacts/engine/android-arm64-release/flutter.jar')
+//}
