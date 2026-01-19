@@ -69,7 +69,7 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-            "getInitialMedia" -> result.success(initialMedia?.toString())
+            "getInitialMedia" -> result.success((latestMedia ?: initialMedia)?.toString())
             "reset" -> {
                 initialMedia = null
                 latestMedia = null
@@ -90,7 +90,7 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
 
                 val value = getMediaUris(intent)
                 if (initial) initialMedia = value
-                latestMedia = value
+                if (!initial) latestMedia = value
                 eventSinkMedia?.success(latestMedia?.toString())
             }
 
@@ -102,7 +102,7 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
                                 .put("type", MediaType.URL.value))
                 )
                 if (initial) initialMedia = value
-                latestMedia = value
+                if (!initial) latestMedia = value
                 eventSinkMedia?.success(latestMedia?.toString())
             }
         }
@@ -186,7 +186,13 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         this.binding = binding
         binding.addOnNewIntentListener(this)
-        handleIntent(binding.activity.intent, true)
+        val intent = binding.activity.intent
+        // We set the activity intent to null after handling it to avoid that the os
+        // calls onAttachedToActivity again with the same intent
+        binding.activity.intent = null
+        if (intent != null) {
+            handleIntent(intent, true)
+        }
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
