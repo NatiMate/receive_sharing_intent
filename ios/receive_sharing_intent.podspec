@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'receive_sharing_intent'
-  s.version          = '1.8.1'
+  s.version          = '1.9.0'
   s.summary          = 'A flutter plugin that enables flutter apps to receive sharing photos from other apps.'
   s.description      = <<-DESC
 A flutter plugin that enables flutter apps to receive sharing photos from other apps.
@@ -12,10 +12,8 @@ A flutter plugin that enables flutter apps to receive sharing photos from other 
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Kasem' => 'kasem.jaffer@gmail.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
-  s.public_header_files = 'Classes/**/*.h'
+  s.source_files = 'receive_sharing_intent/Sources/receive_sharing_intent/**/*.swift'
   s.dependency 'Flutter'
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
 end
-

@@ -1,23 +1,23 @@
-group 'com.kasem.receive_sharing_intent'
-version '1.0-SNAPSHOT'
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 buildscript {
-    ext.kotlin_version = '2.2.0'
+    ext.kotlin_version = '2.4.0'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.12.3'
+        classpath 'com.android.tools.build:gradle:9.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    id "com.android.library"
+}
 
 group 'com.kasem.receive_sharing_intent'
-version '1.6.6'
+version '1.9.0'
 
 rootProject.allprojects {
     repositories {
@@ -31,13 +31,17 @@ android {
         namespace 'com.kasem.receive_sharing_intent'
     }
 
-    compileSdkVersion 36
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        minSdkVersion 19
+        compileSdk 37
+        minSdkVersion 21
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     lintOptions {
@@ -52,21 +56,9 @@ android {
     }
 }
 
-//// Add dependency for flutter while developing the plugin
-//dependencies {
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-//    // This dependency provides the io.flutter.* classes
-//    compileOnly files(getFlutterJarPath())
-//}
-//
-//// Function to locate the Flutter jar
-//def getFlutterJarPath() {
-//    def properties = new Properties()
-//    file("local.properties").withInputStream { properties.load(it) }
-//    def flutterRoot = properties.getProperty("flutter.sdk")
-//    assert flutterRoot != null, "flutter.sdk not set in local.properties"
-//    if (flutterRoot == null) {
-//        throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-//    }
-//    return new File(flutterRoot, 'bin/cache/artifacts/engine/android-arm64-release/flutter.jar')
-//}
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
