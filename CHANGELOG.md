@@ -4,7 +4,7 @@
 
 * **Requires Flutter 3.38 or newer.**
 * **iOS**: Apps must now adopt a `SceneDelegate` for the new `UIScene` lifecycle — see the README and the [official guide](https://docs.flutter.dev/release/breaking-changes/uiscenedelegate#migrate-a-flutter-plugin).
-* **iOS**: Now uses **Swift Package Manager only** (the CocoaPods podspec was removed). Enable it with `flutter config --enable-swift-package-manager` and link the `receive-sharing-intent` product in your Share Extension.
+* **iOS**: Adds **Swift Package Manager** support alongside CocoaPods. Prefer SPM with `flutter config --enable-swift-package-manager` and link the `receive-sharing-intent` product in your Share Extension; CocoaPods remains supported via the podspec.
 * **iOS**: The Share Extension compose UI was rebuilt (see below). `presentationAnimationDidFinish()`, `navigationTitle` and `characterLimit` were removed — use the new override hooks instead.
 * **iOS**: Minimum deployment target raised to iOS 13.0.
 

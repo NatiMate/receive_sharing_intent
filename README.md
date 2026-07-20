@@ -214,30 +214,49 @@ Make sure the deployment target for Runner.app and the share extension is the sa
 ```
 
 
-#### 5. Make the plugin available to the Share Extension (Swift Package Manager)
+#### 5. Make the plugin available to the Share Extension
 
-This plugin is distributed as a **Swift Package** (SPM only — there is no CocoaPods
-podspec). Make sure Swift Package Manager is enabled for your project:
+This plugin supports both **Swift Package Manager** and **CocoaPods**. Your Share
+Extension needs access to the `receive_sharing_intent` module (it provides
+`RSIShareViewController`).
+
+##### Option A: Swift Package Manager (recommended)
+
+Make sure Swift Package Manager is enabled:
 
 ```sh
 flutter config --enable-swift-package-manager
 ```
 
-Flutter automatically adds the plugin to your **Runner** target. Your **Share
-Extension** target also needs access to the `receive_sharing_intent` module
-(it provides `RSIShareViewController`). Add it in Xcode:
+Flutter automatically adds the plugin to your **Runner** target. For the **Share
+Extension**, link the package in Xcode:
 
 * Select the **Share Extension** target → **General** tab.
 * Under **Frameworks and Libraries**, click **+**.
 * Choose the **`FlutterGeneratedPluginSwiftPackage`** library from the
   `receive_sharing_intent` Swift package and add it.
 
-> If you previously used CocoaPods, remove the `ios/Podfile` and run
-> `pod deintegrate` in the `ios/` directory, then remove the
-> `#include "Pods/..."` lines from `ios/Flutter/Debug.xcconfig`,
-> `ios/Flutter/Release.xcconfig` and any references to 
-> **`receive-sharing-intent`** in `project.pbxproj`. See the
-> [example project](./example/ios) for a fully SPM-only setup.
+##### Option B: CocoaPods
+
+Add the following to your [ios/Podfile](./example/ios/Podfile):
+
+```ruby
+...
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # Share Extension is name of Extension which you created which is in this case 'Share Extension'
+  target 'Share Extension' do
+    inherit! :search_paths
+  end
+end
+...
+```
+
+Then run `pod install` in the `ios/` directory.
 
 #### 6. Add Runner and Share Extension in the same group
 
@@ -371,18 +390,20 @@ class SceneDelegate: FlutterSceneDelegate {
 }
 ```
 
-> This plugin is distributed via Swift Package Manager only, so make sure SPM is
-> enabled (`flutter config --enable-swift-package-manager`).
-
 #### Compiling issues and their fixes
 
 * Error: No such module 'receive_sharing_intent' (in the Share Extension)
-  * Fix: Add the `receive-sharing-intent` library to the Share Extension target under
-    **General → Frameworks and Libraries** (see step 5).
+  * SPM: Add the `receive-sharing-intent` library to the Share Extension target under
+    **General → Frameworks and Libraries** (see step 5, Option A).
+  * CocoaPods: Ensure the Share Extension target inherits search paths from the
+    Runner pod target (see step 5, Option B), then run `pod install`.
 
 * Error: Unable to resolve module dependency: 'receive_sharing_intent'
   * Fix: Ensure Swift Package Manager is enabled and the Share Extension target links the
-    `receive-sharing-intent` Swift package product (see step 5).
+    `receive-sharing-intent` Swift package product (see step 5, Option A).
+
+* Error: App does not build after adding Share Extension?
+  * Fix: Check Build Settings of your share extension and remove everything that tries to import CocoaPods from your main project. i.e. remove everything under `Linking/Other Linker Flags`
 
 * Error: Invalid Bundle. The bundle at 'Runner.app/Plugins/Sharing Extension.appex' contains disallowed file 'Frameworks'
     * Fix: https://stackoverflow.com/a/25789145/2061365

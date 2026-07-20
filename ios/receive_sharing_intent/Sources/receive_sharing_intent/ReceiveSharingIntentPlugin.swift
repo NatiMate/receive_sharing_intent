@@ -7,6 +7,9 @@ public let kUserDefaultsKey = "ShareKey"
 public let kUserDefaultsMessageKey = "ShareMessageKey"
 public let kAppGroupIdKey = "AppGroupId"
 
+/// Backward-compatible alias for the pre-1.9.0 class name.
+public typealias SwiftReceiveSharingIntentPlugin = ReceiveSharingIntentPlugin
+
 public class ReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
     static let kMessagesChannel = "receive_sharing_intent/messages"
     static let kEventsChannelMedia = "receive_sharing_intent/events-media"
