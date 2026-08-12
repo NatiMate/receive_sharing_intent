@@ -134,9 +134,10 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
             Intent.ACTION_SEND_MULTIPLE -> {
                 val uris = intent.parcelableArrayList<Uri>(Intent.EXTRA_STREAM)
                 val mimeTypes = intent.getStringArrayExtra(Intent.EXTRA_MIME_TYPES)
+                val text = intent.getStringExtra(Intent.EXTRA_TEXT)
 
                 uris?.mapIndexedNotNull { index, uri ->
-                    toJsonObject(uri, null, mimeTypes?.getOrNull(index))
+                    toJsonObject(uri, text, mimeTypes?.getOrNull(index))
                 }?.let { JSONArray(it) }
             }
 
@@ -153,6 +154,7 @@ class ReceiveSharingIntentPlugin : FlutterPlugin, ActivityAware, MethodCallHandl
                 ?: Pair(null, null)
         return JSONObject()
                 .put("path", path ?: text)
+                .put("message", text)
                 .put("type", type.value)
                 .put("mimeType", mType)
                 .put("thumbnail", thumbnail)

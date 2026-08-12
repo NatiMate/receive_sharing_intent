@@ -18,7 +18,9 @@ class SharedMediaFile {
   /// i.e. image/jpeg, video/mp4, text/plain
   final String? mimeType;
 
-  /// Post message iOS ONLY
+  /// Caption / accompanying text from the share.
+  /// iOS: share extension post message.
+  /// Android: Intent.EXTRA_TEXT (e.g. Instagram-style video + caption).
   final String? message;
 
   SharedMediaFile({
